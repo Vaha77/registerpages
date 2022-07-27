@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import { navbar } from "./utils/data";
+import "materialize-css";
+export const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Navigate to={"/home"} />} />
+        <Route>
+          {navbar.map(({ path, Element, id, hidden, useParams }) => {
+            return (
+              !useParams &&
+              hidden && <Route key={id} path={path} element={Element} />
+            );
+          })}
+        </Route>
+        <Route element={<Navbar />}>
+          {navbar.map(({ path, Element, id, hidden, useParams }) => {
+            return (
+              (useParams || !hidden) && (
+                <Route key={id} path={path} element={Element} />
+              )
+            );
+          })}
+        </Route>
+      </Routes>
+    </>
   );
-}
+};
 
 export default App;
